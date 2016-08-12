@@ -37,9 +37,8 @@ router.get('/:page', function(req, res, next){
 		}
 	})
 	.then( function(foundPage){
-		res.render('wikipage', {page: foundPage});
-	}).then( function(data){
-	
+		res.locals.page = foundPage;
+		res.render('wikipage');
 	})
 	.catch(next);		
 });
