@@ -13,12 +13,10 @@ router.get('/', function(req, res){
 router.post('/', function(req, res){
 	var title = req.body.title;
 	var content = req.body.pageContent;
-	var urlTitle = models.makeURLTitle(title);
 
 	var page = Page.build({
 		title: title,
 		content: content,
-		urlTitle: urlTitle
 	});
 	page.save();
 	res.redirect('/');

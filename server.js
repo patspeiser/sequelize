@@ -1,4 +1,4 @@
-var http = require('http');
+ar http = require('http');
 var server = http.createServer(require('./app'));
 var DB = require('./models/index.js');
 

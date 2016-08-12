@@ -3,6 +3,12 @@ var db = new Sequelize('postgres://localhost:5432/wikistack', {
 	logging: false
 })
 
+var makeURLTitle = function(title){
+  title = title.replace(/\s+/g, '_')
+  title = title.replace(/[\W]+/g, '')
+  return title;
+};
+
 //create pages schema
 var Page = db.define('page', {
 	title: { type: Sequelize.STRING, allowNull: false },
@@ -14,18 +20,19 @@ var Page = db.define('page', {
 			return '/wiki/' + this.urlTitle;	
 		}
 	}
+} , {
+	hooks: { 
+			beforeValidate: function(page, options){
+				console.log(page.title);
+				page.urlTitle = makeURLTitle(page.title);
+			}
+	}
 });
 
 var User = db.define('user', {
 	name: {type: Sequelize.STRING, allowNull: false },
 	email: { type: Sequelize.STRING, allowNull: false, isEmail: true }
 })
-
-var makeURLTitle = function(title){
-	title = title.replace(/\W/, '');
-	title = title.replace(/ /, '_');
-	return title;
-};
 
 module.exports = {
 	Page: Page,
