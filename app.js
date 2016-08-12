@@ -16,7 +16,7 @@ app.use(bodyParser.urlencoded({extended: true}));
 app.use(express.static(__dirname + '/node_modules/'));
 
 app.get('/', function(req, res){
-	res.send('at /');
+	res.render('index');
 });
 
 app.use('/wiki', router);

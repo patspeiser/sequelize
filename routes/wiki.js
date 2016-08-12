@@ -18,12 +18,28 @@ router.post('/', function(req, res){
 		title: title,
 		content: content,
 	});
-	page.save();
-	res.redirect('/');
+	page.save().then( function(stuff){
+		res.json(stuff)
+	}).catch( function(){
+		res.redirect('/');
+	})
 })
 
 router.get('/add', function(req, res){
 	res.render('addpage.html');
 })
 
-
+router.get('/:page', function(req, res, next){
+	var page = req.params.page;
+	Page.findOne({
+		where: {
+			urlTitle: page
+		}
+	})
+	.then( function(foundPage){
+		res.render('wikipage', {page: foundPage});
+	}).then( function(data){
+	
+	})
+	.catch(next);		
+});
