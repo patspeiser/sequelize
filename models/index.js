@@ -5,18 +5,31 @@ var db = new Sequelize('postgres://localhost:5432/wikistack', {
 
 //create pages schema
 var Page = db.define('page', {
-	title: Sequelize.STRING,
-	urlTitle: Sequelize.STRING,
-	content: Sequelize.TEXT,
-	status: Sequelize.ENUM('open', 'closed')
+	title: { type: Sequelize.STRING, allowNull: false },
+	urlTitle: { type: Sequelize.STRING, allowNull: false },
+	content: { type: Sequelize.TEXT, allowNull: false, notEmpty: true},
+	date: { type: Sequelize.DATE, defaultValue: Sequelize.NOW },
+	status: Sequelize.ENUM('open', 'closed'),
+	route: { type: Sequelize.VIRTUAL, set: function(){
+			return '/wiki/' + this.urlTitle;	
+		}
+	}
 });
 
 var User = db.define('user', {
-	name: Sequelize.STRING,
-	email: Sequelize.STRING
+	name: {type: Sequelize.STRING, allowNull: false },
+	email: { type: Sequelize.STRING, allowNull: false, isEmail: true }
 })
+
+var makeURLTitle = function(title){
+	title = title.replace(/\W/, '');
+	title = title.replace(/ /, '_');
+	return title;
+};
 
 module.exports = {
 	Page: Page,
-	User: User
+	User: User,
+	makeURLTitle: makeURLTitle
 }
+
